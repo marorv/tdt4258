@@ -77,20 +77,38 @@
 // The CPU will start executing here after a reset
 //
 /////////////////////////////////////////////////////////////////////////////
+	
+cmu_base_addr:
+	.long CMU_BASE
+gpio_pc_addr:
+	.long GPIO_PC_BASE
+gpio_pa_addr:	
+	.long GPIO_PA_BASE
+
+loop:
+
+//get button values
+ldr r3, [r1, #GPIO_DIN]
+//left shift r3 8 bits
+lsl r3, r3, #8
+
+//set relevant GPIO to HIGH
+mov r5, #0x0100
+str r3, [r2, #GPIO_DOUT]
+
+bl loop
 
 	.globl  _reset
 	.type   _reset, %function
 	.thumb_func
 _reset:
-	//   l o a d  CMU  b a s e   a d d r e s s
+
 	ldr r1, cmu_base_addr
-	//   l o a d   c u r r e n t   v a l u e   o f  HFPERCLK  ENABLE
+
 	ldr r2 ,   [ r1 ,  #CMU_HFPERCLKEN0]
-	//   s e t   b i t   f o r   GPIO   c l k
 	mov r3,  #1
 	lsl r3, r3, #CMU_HFPERCLKEN0_GPIO
 	orr r2,r2,r3
-	//   s t o r e   new   v a l u e
 	str r2, [r1,#CMU_HFPERCLKEN0]
 
 
@@ -100,15 +118,11 @@ _reset:
 
 	//set drive strength to high
 	mov r2, #0x02
-	str r2, [r2, #GPIO_CTRL]
+	str r2, [r1, #GPIO_CTRL]
 
 	//set pins 8-15 to type output (LED)
 	mov r2, #0x55555555
 	str r2, [r1, #GPIO_MODEH]
-
-	//set GPIO 8-15 to HIGH
-	mov r2, #0xff00
-	str r2, [r1, #GPIO_DOUT]
 
 
 	//INIT BUTTONS
@@ -120,14 +134,11 @@ _reset:
 	mov r2, #0xff
 	str r2, [r1, #GPIO_DOUT]
 
-	ldr r3, [r1, #GPIO_DIN]
-	
-cmu_base_addr:
-	.long CMU_BASE
-gpio_pc_addr:
-	.long GPIO_PC_BASE
-gpio_pa_addr:	
-	.long GPIO_PA_BASE
+	//set r4 to gpio pc base
+	ldr r2, gpio_pa_addr
+
+	bl loop
+
 	b .
 
 /////////////////////////////////////////////////////////////////////////////
