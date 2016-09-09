@@ -84,15 +84,19 @@ gpio_pc_addr:
 	.long GPIO_PC_BASE
 gpio_pa_addr:	
 	.long GPIO_PA_BASE
+iser0:
+	.long ISER0
+gpio_base:
+	.long GPIO_BASE
 
 loop:
 
 //get button values
 ldr r3, [r1, #GPIO_DIN]
-//left shift r3 8 bits
+//left shift r3 8 bits to match the LED bitstring
 lsl r3, r3, #8
 
-//set relevant GPIO to HIGH
+//set relevant LED lights to on
 mov r5, #0x0100
 str r3, [r2, #GPIO_DOUT]
 
@@ -113,10 +117,11 @@ _reset:
 
 
 	//INIT LED LIGHTS
-	//load gpio pa base
+
+	//load port a as base
 	ldr r1, gpio_pa_addr
 
-	//set drive strength to high
+	//set gpio drive strength to high
 	mov r2, #0x02
 	str r2, [r1, #GPIO_CTRL]
 
@@ -126,18 +131,37 @@ _reset:
 
 
 	//INIT BUTTONS
+	//load port c as base
 	ldr r1, gpio_pc_addr
 
+	//set button pins as type input
 	mov r2, #0x33333333
 	str r2, [r1, #GPIO_MODEL]
 
+	//set r2 to 0xff and store the value to GPIO_PC_DOUT
 	mov r2, #0xff
 	str r2, [r1, #GPIO_DOUT]
 
-	//set r4 to gpio pc base
-	ldr r2, gpio_pa_addr
+	//INIT interrupt
+	ldr r1, gpio_base
 
-	bl loop
+	mov r2, #0x22222222
+	str r2, [r1, #GPIO_EXTIPSELL]
+	
+	mov r2, #0xff
+	str r2, [r1, #GPIO_EXTIFALL]
+
+	mov r2, #0xff
+	str r2, [r1, #GPIO_EXTIRISE]
+
+	mov r2, #0xff
+	str r2, [r1, #GPIO_IEN]
+
+	movw r2, #0x802
+	ldr r3, iser0
+	str r2, [r3]
+
+	wfi
 
 	b .
 
@@ -149,12 +173,28 @@ _reset:
 /////////////////////////////////////////////////////////////////////////////
 
     .thumb_func
-gpio_handler:  
-	b .  // do nothing
+gpio_handler:
+	ldr r1, gpio_base
+	ldr r2, [r1, GPIO_IF]
+	str r2, [r1, GPIO_IFC]
+
+	ldr r1, gpio_pc_addr
+	ldr r2, gpio_pa_addr
+
+	//get button values
+	ldr r3, [r1, #GPIO_DIN]
+	//left shift r3 8 bits to match the LED bitstring
+	lsl r3, r3, #8
+
+	//set relevant LED lights to on
+	mov r5, #0x0100
+	str r3, [r2, #GPIO_DOUT]
+
+	bx lr
 
 /////////////////////////////////////////////////////////////////////////////
 
     .thumb_func
 dummy_handler:  
-	b .  // do nothing
+	bx lr  // do nothing
 
