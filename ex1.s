@@ -88,6 +88,8 @@ iser0:
 	.long ISER0
 gpio_base:
 	.long GPIO_BASE
+scr_addr:
+	.long SCR
 
 loop:
 
@@ -163,7 +165,13 @@ _reset:
 
 	wfi
 
-	b .
+	b deepsleep
+
+	.thumb_func
+deepsleep:
+	ldr r1, scr_addr
+	mov r2, #6
+	str r2, [r1]
 
 /////////////////////////////////////////////////////////////////////////////
 //
