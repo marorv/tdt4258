@@ -183,8 +183,7 @@ gpio_handler:
 	lsl r3, r3, #8
 
 	//set relevant LED lights to on
-	mov r5, #0xff00
-	str r5, [r2, #GPIO_DOUT]
+	str r3, [r2, #GPIO_DOUT]
 
 	bx lr
 
