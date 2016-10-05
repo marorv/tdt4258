@@ -15,6 +15,7 @@ void __attribute__ ((interrupt)) TIMER1_IRQHandler()
 	
 	counter = counter + 1;
 
+	/*44100 * 317 = 14 000 000 */
 	if (counter >= 317) {
 		counter = 0;
 		*GPIO_PA_DOUT = 0x0000;
@@ -29,14 +30,22 @@ void __attribute__ ((interrupt)) GPIO_EVEN_IRQHandler()
 	/* TODO handle button pressed event, remember to clear pending interrupt */
 	
 
-	*GPIO_PA_DOUT = 0xfe00; 
-	*GPIO_IFC = 0xffff;
+	did_press();
+	clear_gpio_interrupt();
 }
 
 /* GPIO odd pin interrupt handler */
 void __attribute__ ((interrupt)) GPIO_ODD_IRQHandler()
 {
 	/* TODO handle button pressed event, remember to clear pending interrupt */
-	*GPIO_PA_DOUT = 0x5500;
+	did_press();
+	clear_gpio_interrupt();
+}
+
+void did_press () {
+	/*todo on press*/
+}
+
+void clear_gpio_interrupt () {
 	*GPIO_IFC = 0xffff;
 }
