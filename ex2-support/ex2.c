@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #include "efm32gg.h"
+#include "header.h"
 
 /* 
   TODO calculate the appropriate sample period for the sound wave(s) 
@@ -14,11 +15,11 @@
 #define SAMPLE_PERIOD 317
 #define CLOCK_FREQUENCY 14000000 // 14MHz (default)
 
-/* Declaration of peripheral setup functions */
+/* Declaration of peripheral setup functions. Put these in a header file.
 void setupGPIO();
 void setupTimer(uint32_t period);
 void setupDAC();
-void setupNVIC();
+void setupNVIC(); */
 
 /* Your code will start executing here */
 int main(void)
