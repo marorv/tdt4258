@@ -9,4 +9,4 @@ void setupNVIC(void);
 void setupSong(void);
 void playRandomSound(void);
 
-#endif				/* HEADER_H */
+#endif /* HEADER_H */
