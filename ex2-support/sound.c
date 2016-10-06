@@ -3,16 +3,18 @@
 #include "efm32gg.h"
 #include "header.h"
 
+#define PERIOD 20000
+
 void setupSong() {
 	setupDAC();
-	setupTimer();
+	setupTimer(PERIOD);
 	/*start timer?*/
 }
 
 void playRandomSound() {
-	int sample = rand() % 10000
+	int sample = (int) (rand() % 10000);
 
 	*DAC0_CH0DATA = sample;
-	*DAC1_CH0DATA = sample;
+	*DAC0_CH1DATA = sample;
 }
 
