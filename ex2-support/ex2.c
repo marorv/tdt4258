@@ -11,9 +11,7 @@
   registers are 16 bits.
 */
 /* The period between sound samples, in clock cycles */
-#define SAMPLES_PER_SECONDS 44100
-#define SAMPLE_PERIOD 317
-#define CLOCK_FREQUENCY 14000000	// 14MHz (default)
+
 
 /* Declaration of peripheral setup functions. Put these in a header file.
 void setupGPIO();
@@ -25,10 +23,11 @@ void setupNVIC(); */
 int main(void)
 {
 	/* Call the peripheral setup functions */
+   set_current_song(0);
+
 	setupGPIO();
 	setupDAC();
 	setupTimer(SAMPLE_PERIOD);
-
 	setupNVIC();
 
 	/* Activate deep sleep mode and set sleep on exit. When going out of interrupt routine it will automatically go into deep sleep again. */

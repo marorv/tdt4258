@@ -14,11 +14,11 @@ LINKERSCRIPT=lib/efm32gg.ld
 ex2.bin : ex2.elf
 	${OBJCOPY} -O binary $< $@
 
-ex2.elf : ex2.o timer.o dac.o gpio.o interrupt_handlers.o
+ex2.elf : ex2.o timer.o dac.o gpio.o interrupt_handlers.o sound.o
 	${LD} -T ${LINKERSCRIPT} $^ -o $@ ${LDFLAGS} 
 
 %.o : %.c
-	${CC} ${CFLAGS} -c $< -o $@
+	${CC} ${CFLAGS} -o $@ -c $< -lm 
 
 .PHONY : pretty
 pretty :

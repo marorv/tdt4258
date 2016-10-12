@@ -32,3 +32,10 @@ void setupTimer(uint16_t period)
 	*ISER0 |= (1 << 12);
 
 }
+
+void start_timer(){
+	*TIMER1_CMD = 1;
+}
+void stop_timer () {
+	*TIMER1_CMD = 2;
+}

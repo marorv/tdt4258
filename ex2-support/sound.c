@@ -3,50 +3,91 @@
 
 #include "efm32gg.h"
 #include "header.h"
+#include "tunes.h"
+
+#ifndef __sound_c
+#define __sounc_c
+
+#define MAX_VOLUME 200
 
 int sampleCounter = 0;
+int tuneCounter = 0;
 
-int volume = 200;
-int frequency = 250;
+int volume = 100;
+int frequency = 0;
+int high = 0;
 
+int currentTone = 0;
 
-
-float getFrequencyOfNote (char c) {
-	switch (c) {
-		case 'C':
-		return 100;
-		case 'D':
-		return 300;
-		case 'E':
-		return 500;
-	}
-	return 0;
-}
-
-void pushPeriod () {
-}
+struct tone *currentSongStartPointer;
+int currentSong = 0;
 
 int getAmplitude () {
 	return (volume);
 }
-
 void play_sample() {
 
-	int value = ((double)sampleCounter / frequency) * volume;
-
-	*DAC0_CH0DATA = value;
-	*DAC0_CH1DATA = value;
+	if (high) {
+		*DAC0_CH0DATA = volume;
+		*DAC0_CH1DATA = volume;
+	} else {
+		*DAC0_CH0DATA = 0;
+		*DAC0_CH1DATA = 0;
+	}
 
 	sampleCounter++;
 
 	/* toggle high/low? */
-	if (sampleCounter >= frequency) {
+	if (sampleCounter >= (frequency/2)) {
+		high = (high) ? 0:1;
 		sampleCounter = 0;
-	
+	}
 }
 
 void do_timer () {
+
+	tuneCounter++;
+
+	if (tuneCounter >= (currentSongStartPointer[currentTone].sampleCycles)) {
+		currentTone += 1;
+		if (currentTone >= songLengths[currentSong]) {
+			currentTone = 0;
+		}
+
+		frequency = currentSongStartPointer[currentTone].frequency;
+		tuneCounter = 0;
+	}
+
 	play_sample();
+}
+
+void reset () {
+	sampleCounter = 0;
+	tuneCounter = 0;
+}
+
+void set_current_song (int song) {
+	reset();
+	currentSongStartPointer = songStartPointers[song];
+	currentSong = song;
+	frequency = currentSongStartPointer[currentTone].frequency;
+}
+
+
+
+void decrease_volume () {
+	volume -= 10;
+
+	if (volume < 0) {
+		volume = 0;
+	}
+}
+void increase_volume () {
+	volume += 10;
+
+	if (volume > MAX_VOLUME) {
+		volume = MAX_VOLUME;
+	}
 }
 
 //Notes procured from http://www.phy.mtu.edu/~suits/notefreqs.html
@@ -88,3 +129,5 @@ void do_timer () {
 #define A2 110.00
 #define As2 116.54
 #define B2 123.47
+
+#endif

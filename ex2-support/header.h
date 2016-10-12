@@ -16,6 +16,15 @@
 #define BUTTON_7 0xbf
 #define BUTTON_8 0x7f
 
+void onButton1Click(void);
+void onButton2Click(void);
+void onButton3Click(void);
+void onButton4Click(void);
+void onButton5Click(void);
+void onButton6Click(void);
+void onButton7Click(void);
+void onButton8Click(void);
+
 void setupGPIO(void);
 void setupTimer(uint32_t period);
 void setupDAC(void);
@@ -24,5 +33,6 @@ void setupNVIC(void);
 void pushPeriod(void);
 void do_timer(void);
 int sawTooth(float perc);
+void set_current_song(int song);
 
 #endif				/* HEADER_H */

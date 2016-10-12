@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #include "efm32gg.h"
+#include "header.h"
 
 int counter = 0;
 bool isHigh = false;
@@ -13,9 +14,8 @@ void clear_gpio_interrupt();
 /* TIMER1 interrupt handler */
 void __attribute__ ((interrupt)) TIMER1_IRQHandler()
 {
-	
-
 	*TIMER1_IFC = 1;
+	do_timer();
 }
 
 /* GPIO even pin interrupt handler */
