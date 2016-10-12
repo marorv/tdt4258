@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "header.h"
 
 #include "efm32gg.h"
 #include "header.h"
@@ -38,6 +39,26 @@ void __attribute__ ((interrupt)) GPIO_ODD_IRQHandler()
 void did_press()
 {
 	/*todo on press */
+	switch (*GPIO_PC_DIN){
+		case BUTTON_1:
+			onButton1Click();
+			break;
+
+		case BUTTON_2:
+			onButton2Click();
+			break;
+
+		case BUTTON_3:
+			onButton3Click();
+			break;
+
+		case BUTTON_4:
+			onButton4Click();
+			break;
+		case BUTTON_5:
+			onButton5Click();
+			break;
+	}
 }
 
 void clear_gpio_interrupt()
