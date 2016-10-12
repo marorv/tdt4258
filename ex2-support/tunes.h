@@ -8,8 +8,11 @@ struct tone {
 
 /**/
 
-struct tone test[1] = {
-	{200, 20000}
+struct tone test[4] = {
+	{200, 20000},
+	{100, 10000},
+	{0, 40000},
+	{200, 10000}
 };
 
 struct tone lightTest[4] = {
@@ -23,6 +26,6 @@ struct tone lightTest[4] = {
 #define SONGS  2
 
 struct tone *songStartPointers[SONGS] = {test, lightTest};
-int songLengths[SONGS] = {1, 4};
+int songLengths[SONGS] = {4, 4};
 
 #endif

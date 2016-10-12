@@ -22,7 +22,6 @@ void onButton1Click(){
 	if (current_led > 1){
 		current_led--;
 		*GPIO_PA_DOUT = ~get_led(current_led);
-		stop_timer();
 	}
 }
 
@@ -35,7 +34,6 @@ void onButton3Click(){
 	if (current_led < 4){
 		current_led++;
 		*GPIO_PA_DOUT =  ~get_led(current_led);
-		stop_timer();
 	}
 	
 }
@@ -44,7 +42,6 @@ void onButton4Click(){
 	decrease_volume();
 }
 
-void onButton5Click() {
-	set_current_song(current_led);
-	start_timer();
+void onButton5Click(){
+	
 }

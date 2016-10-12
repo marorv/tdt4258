@@ -9,6 +9,7 @@
 #define __sounc_c
 
 #define MAX_VOLUME 200
+#define SILENCE 0
 
 int sampleCounter = 0;
 int tuneCounter = 0;
@@ -52,22 +53,30 @@ void do_timer () {
 		currentTone += 1;
 		if (currentTone >= songLengths[currentSong]) {
 			currentTone = 0;
+			stop_timer();
 		}
 
 		frequency = currentSongStartPointer[currentTone].frequency;
 		tuneCounter = 0;
 	}
 
-	play_sample();
+	if (frequency != SILENCE) {
+		play_sample();
+	}
 }
 
 void reset () {
 	sampleCounter = 0;
 	tuneCounter = 0;
+	currentTone = 0;
 }
 
 void set_current_song (int song) {
+	song-=1;
 	reset();
+	if (song < 0 || song >= SONGS) {
+		return;
+	}
 	currentSongStartPointer = songStartPointers[song];
 	currentSong = song;
 	frequency = currentSongStartPointer[currentTone].frequency;
