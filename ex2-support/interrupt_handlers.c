@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "header.h"
 
 #include "efm32gg.h"
 
@@ -45,15 +46,18 @@ void did_press()
 
 		case BUTTON_2:
 			onButton2Click();
-			break
+			break;
 
 		case BUTTON_3:
 			onButton3Click();
-			break
+			break;
 
 		case BUTTON_4:
 			onButton4Click();
-			break
+			break;
+		case BUTTON_5:
+			onButton5Click();
+			break;
 	}
 }
 
