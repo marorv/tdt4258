@@ -16,6 +16,12 @@
 #define BUTTON_7 0xbf
 #define BUTTON_8 0x7f
 
+#define LED_1 0x0100
+#define LED_2 0x0200
+#define LED_3 0x0400
+#define LED_4 0x0800
+
+
 void setupGPIO(void);
 void setupTimer(uint32_t period);
 void setupDAC(void);
@@ -24,5 +30,11 @@ void setupNVIC(void);
 void pushPeriod(void);
 void do_timer(void);
 int sawTooth(float perc);
+
+void onButton1Click(void);
+void onButton2Click(void);
+void onButton3Click(void);
+void onButton4Click(void);
+void onButton5Click(void);
 
 #endif				/* HEADER_H */

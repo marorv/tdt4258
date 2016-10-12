@@ -1,0 +1,6 @@
+#include "header.h"
+
+void onButton1Click(){
+	*GPIO_PA_DOUT = ~BUTTON_1;
+	
+}
