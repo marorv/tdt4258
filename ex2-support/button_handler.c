@@ -45,6 +45,7 @@ void onButton4Click(){
 }
 
 void onButton5Click() {
+	set_run_mode();
 	set_current_song(current_led);
 	start_timer();
 }

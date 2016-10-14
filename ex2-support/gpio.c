@@ -3,42 +3,24 @@
 
 #include "efm32gg.h"
 
-/* function to set up GPIO mode and interrupts*/
+/* function that sets up the GPIO pins*/
 void setupGPIO()
 {
-	/* TODO set input and output pins for the joystick */
-
-	/* Example of HW access from C code: turn on joystick LEDs D4-D8
-	   check efm32gg.h for other useful register definitions
-	 */
-	/* enable GPIO clock */
 	*CMU_HFPERCLKEN0 |= CMU2_HFPERCLKEN0_GPIO;
 
-	/*
-	 * GPIO PA -> LEDS
-	 */
+	*GPIO_PA_CTRL = 0; /*set the drive strength of the LED pins to low*/
 
-	/* set low drive strength */
-	*GPIO_PA_CTRL = 0;
+	*GPIO_PA_MODEH = 0x55555555; /*set the LED pins port A 8-15 to output pins*/
 
-	/* set pins A8-15 as output */
-	*GPIO_PA_MODEH = 0x55555555;
+	*GPIO_PA_DOUT = 0xfe00;	/*setting the LED value to 0xfe00, which indicates that only the leftmost light should be on at start time*/
 
-	/* Turn off all leds (8-15) */
-	*GPIO_PA_DOUT = 0xfe00;	// [1111 1111 0000 0000] only the most left 8 bits affects the leds because they are mapped to pins A8-A15 (see GPIO_MODEH). 
+	*GPIO_PC_MODEL = 0x33333333; /*set button pins to input pins*/
 
-	/* set pins C0-C7 as input */
-	*GPIO_PC_MODEL = 0x33333333;
+	*GPIO_PC_DOUT = 0xff; /*enable data output for button pins*/
 
-	/* Enable data output on port C, pins 0-7 */
-	*GPIO_PC_DOUT = 0xFF;
+	*GPIO_EXTIPSELL = 0x22222222; /*set GPIO_EXTIPSELL to 0x22222222 for the button pins*/
 
-	/* enable external interrupts for port C, pins 0-7 */
-	*GPIO_EXTIPSELL = 0x22222222;
+	*GPIO_EXTIFALL = 0xff; /*set GPIO_EXTIFALL TO 0xff to active interrupts on button down*/
 
-	/* activate interrupt on button pushed down */
-	*GPIO_EXTIFALL = 0xFF;
-
-	/* Enable interrupt generation */
-	*GPIO_IEN = 0xFF;
+	*GPIO_IEN = 0xff; /* set GPIO_IEN to 0xff to enable interrupt generation */
 }

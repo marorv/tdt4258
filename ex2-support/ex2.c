@@ -4,51 +4,27 @@
 #include "efm32gg.h"
 #include "header.h"
 
-/* 
-  TODO calculate the appropriate sample period for the sound wave(s) 
-  you want to generate. The core clock (which the timer clock is derived
-  from) runs at 14 MHz by default. Also remember that the timer counter
-  registers are 16 bits.
-*/
-/* The period between sound samples, in clock cycles */
-
-
-/* Declaration of peripheral setup functions. Put these in a header file.
-void setupGPIO();
-void setupTimer(uint32_t period);
-void setupDAC();
-void setupNVIC(); */
-
-/* Your code will start executing here */
 int main(void)
 {
-	/* Call the peripheral setup functions */
-   set_current_song(0);
+   set_current_song(0); /*set the current song to 0 by default*/
 
+   /*call the setup functions*/
 	setupGPIO();
 	setupDAC();
 	setupTimer(SAMPLE_PERIOD);
 	setupNVIC();
 
-	/* Activate deep sleep mode and set sleep on exit. When going out of interrupt routine it will automatically go into deep sleep again. */
-	//*SCR = 6;
+	
+	*SCR = 6;
 
-	__asm__("wfi");
+	__asm__("wfi"); /*call the assmebly operation wfi to start wait-for-interrupt*/
 
 	return 0;
 }
 
 void setupNVIC()
 {
-	*ISER0 |= 0x802;
-
-	/* TODO use the NVIC ISERx registers to enable handling of interrupt(s)
-	   remember two things are necessary for interrupt handling:
-	   - the peripheral must generate an interrupt signal
-	   - the NVIC must be configured to make the CPU handle the signal
-	   You will need TIMER1, GPIO odd and GPIO even interrupt handling for this
-	   assignment.
-	 */
+	*ISER0 |= 0x802; /*inclusive or on the value of ISER0 and 0x802 to enable gpio interrupt and keep the timer1 interrupt*/
 }
 
 /* if other interrupt handlers are needed, use the following names: 
