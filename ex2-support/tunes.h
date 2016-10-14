@@ -33,22 +33,22 @@ struct tone hit[1] = {
 	{100, 1000}
 };
 
-struct tune got[10] = {
-	{113, 1000},
-	{169, 1000},
-	{134, 500},
-	{126, 500},
-	{113, 1000},
-	{169, 1000},
-	{134, 500},
-	{126, 500},
-	{113, 1000},
-	{169, 1000},
-}
+struct tone got[10] = {
+	{113, 10000},
+	{169, 10000},
+	{134, 5000},
+	{126, 5000},
+	{113, 10000},
+	{169, 10000},
+	{134, 5000},
+	{126, 5000},
+	{113, 10000},
+	{169, 10000},
+};
 
-#define SONGS  5
+#define SONGS  4
 
-struct tone *songStartPointers[SONGS] = {test, lightTest, gameover, hit, got};
-int songLengths[SONGS] = {4, 4, 4, 1, 10};
+struct tone *songStartPointers[SONGS] = {test, gameover, hit, got};
+int songLengths[SONGS] = {4, 4, 1, 10};
 
 #endif
