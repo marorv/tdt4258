@@ -4,6 +4,9 @@
 #include "efm32gg.h"
 #include "header.h"
 
+void start_busy_waiting();
+void start_interrupt_solution();
+
 int main(void)
 {
    set_current_song(0); /*set the current song to 0 by default*/
@@ -11,19 +14,52 @@ int main(void)
    /*call the setup functions*/
 	setupGPIO();
 	setupDAC();
-	setupTimer(SAMPLE_PERIOD);
-	setupNVIC();
-
+   setupTimer(SAMPLE_PERIOD);
+   /*if interruptions are enable, setup NVIC*/
+   if (INTERRUPT_ENABLED) {
+      setupNVIC();
+   }
 	
-	*SCR = 6;
-
-	__asm__("wfi"); /*call the assmebly operation wfi to start wait-for-interrupt*/
+   /*check if interrupt is enabled and runs the corresponding mode*/
+   if (INTERRUPT_ENABLED) {
+      start_interrupt_solution();
+   }
+   else {
+      start_busy_waiting();
+   }
 
 	return 0;
 }
 
+/*start the program with busy waiting*/
+void start_busy_waiting () {
+   int lastButtonsValue = *GPIO_PC_DIN; /*variable to keep track of which was the last button value*/
+   int period = SAMPLE_PERIOD*0.9; 
+   while(1) {
+      /*check the last button value against the current button value, to see if a new button was clicked*/
+      if (*GPIO_PC_DIN != lastButtonsValue) {
+            did_click();
+            lastButtonsValue = *GPIO_PC_DIN; /*set the last button value to the current one*/
+      }
+      /*check if the timer has reached the period counter, so that a new sample should be played*/
+      if (*TIMER1_CNT >= period) {
+         on_sample_timer_interrupt(); /*do the actions that should be done on each sample period*/
+         *TIMER1_CNT = 0; /*reset the counter by setting the timer count to 0*/
+      }
+   }
+}
+
+/*run the program with interrupt and energy save*/
+void start_interrupt_solution () {
+
+   set_deep_sleep_mode(); 
+
+   __asm__("wfi"); /*call the assmebly operation wfi to start wait-for-interrupt*/
+}
+
 void setupNVIC()
 {
+   *ISER0 |= (1 << 12); /*inclusive or on the value of ISER0 and 0000 1000 0000 0000 */
 	*ISER0 |= 0x802; /*inclusive or on the value of ISER0 and 0x802 to enable gpio interrupt and keep the timer1 interrupt*/
 }
 

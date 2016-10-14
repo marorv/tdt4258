@@ -1,6 +1,8 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#define INTERRUPT_ENABLED 1
+
 #define MAX_AMPLITUDE 250
 #define PI 3.14
 #define SAMPLES_PER_SECOND 44100 /*the sample rate*/
@@ -25,12 +27,12 @@
 
 /*define setup functions*/
 void setupGPIO(void);
-void setupTimer(uint32_t period);
+void setupTimer(uint16_t period);
 void setupDAC(void);
 void setupNVIC(void);
 
 /*define sound functions*/
-void do_timer(void);
+void on_sample_timer_interrupt(void);
 void set_current_song(int song);
 void increase_volume(void);
 void decrease_volume(void);
@@ -46,6 +48,9 @@ void onButton3Click(void);
 void onButton4Click(void);
 void onButton5Click(void);
 
-void set_deep_sleep_mode();
-void set_run_mode();
+/*interrupt handler helper functions*/
+void set_deep_sleep_mode(void);
+void set_run_mode(void);
+void did_click(void);
+
 #endif				/* HEADER_H */

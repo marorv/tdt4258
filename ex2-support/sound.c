@@ -14,7 +14,7 @@
 int sampleCounter = 0; /*counter that keeps track of where in a sound period we are*/
 int toneCounter = 0; /*counter that keeps track of where in a tone we are*/
 
-int volume = 100; /*variable defining the volume (amplitude) of the samples*/
+int volume = 100; /*variable defining the current volume (amplitude) of the samples*/
 int frequency = 0; /*variable that defines the frequency of the current tone*/
 int high = 0; /*variable that keeps track of wether the value of a sample should be high or low in a squared period*/
 
@@ -25,7 +25,7 @@ int currentSong = 0; /*int number that keeps track of the index of the current s
 
 /*function that stops that timer, sets the song number as current song, then starts the song.*/
 void play_song (int number) {
-	stop_timer();
+	//stop_timer();
 	set_current_song(number);
 	start_timer();
 }
@@ -56,7 +56,7 @@ void play_sample() {
 }
 
 /*function that should be called on every sample timer interrupt.*/
-void do_timer () {
+void on_sample_timer_interrupt () {
 	/*increase the toneCounter, so that it can keep track on how far into a tone it is.*/
 	toneCounter++;
 
@@ -66,7 +66,7 @@ void do_timer () {
 		if (currentTone >= songLengths[currentSong]) { /*if the tone is the last tone in the current song, stop the timer*/
 			currentTone = 0; /*reset current tone so the same song can be played again*/
 			stop_timer(); /*stop the sample timer*/
-			set_deep_sleep_mode();
+			set_deep_sleep_mode(); /*enable deep sleep mode if possible*/
 		}
 
 		frequency = currentSongStartPointer[currentTone].frequency; /*set the frequency to the frequency of the new tone*/
