@@ -8,47 +8,43 @@ struct tone {
 
 /**/
 
-struct tone test[4] = {
-	{200, 20000},
-	{100, 10000},
-	{0, 40000},
-	{200, 10000}
+struct tone hitblock[3] = {
+	{0, 500},
+	{200, 5000},
+	{100, 5000},
+	
 };
 
-struct tone lightTest[4] = {
-	{600, 20000},
-	{1000, 20000},
-	{800, 20000},
-	{400, 20000}
-};
-
-struct tone gameover[4] = {
+struct tone gameover[5] = {
+	{0, 500},
 	{505, 20000},
 	{535, 20000},
 	{600, 20000},
 	{674, 20000}
 };
 
-struct tone hit[1] = {
+struct tone hit[2] = {
+	{0, 500},
 	{100, 1000}
 };
 
-struct tone got[10] = {
-	{113, 10000},
-	{169, 10000},
-	{134, 5000},
-	{126, 5000},
-	{113, 10000},
-	{169, 10000},
-	{134, 5000},
-	{126, 5000},
-	{113, 10000},
-	{169, 10000},
+struct tone got[11] = {
+	{0, 500},
+	{113, 15000},
+	{169, 15000},
+	{134, 7500},
+	{126, 7500},
+	{113, 15000},
+	{169, 15000},
+	{134, 7500},
+	{126, 7500},
+	{113, 15000},
+	{169, 15000},
 };
 
 #define SONGS  4
 
-struct tone *songStartPointers[SONGS] = {test, gameover, hit, got};
-int songLengths[SONGS] = {4, 4, 1, 10};
+struct tone *songStartPointers[SONGS] = {hitblock, gameover, hit, got};
+int songLengths[SONGS] = {3, 5, 2, 11};
 
 #endif
