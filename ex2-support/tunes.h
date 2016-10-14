@@ -22,10 +22,15 @@ struct tone lightTest[4] = {
 	{400, 20000}
 };
 
+struct tone gameover[4] = {
+	{505, 20000},
+	{535, 20000},
+	{600, 20000},
+	{674, 20000}
+};
+#define SONGS  3
 
-#define SONGS  2
-
-struct tone *songStartPointers[SONGS] = {test, lightTest};
-int songLengths[SONGS] = {4, 4};
+struct tone *songStartPointers[SONGS] = {test, lightTest, gameover};
+int songLengths[SONGS] = {4, 4, 4};
 
 #endif
