@@ -28,9 +28,13 @@ struct tone gameover[4] = {
 	{600, 20000},
 	{674, 20000}
 };
-#define SONGS  3
 
-struct tone *songStartPointers[SONGS] = {test, lightTest, gameover};
-int songLengths[SONGS] = {4, 4, 4};
+struct tone hit[1] = {
+	{100, 1000}
+};
+#define SONGS  4
+
+struct tone *songStartPointers[SONGS] = {test, lightTest, gameover, hit};
+int songLengths[SONGS] = {4, 4, 4, 1};
 
 #endif
