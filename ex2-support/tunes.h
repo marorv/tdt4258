@@ -55,7 +55,7 @@ struct tone got[11] = {
 
 #define SONGS  4
 
-struct tone *songStartPointers[SONGS] = {hitblock, gameover, hit, got};
-int songLengths[SONGS] = {3, 5, 2, 11};
+struct tone *songStartPointers[SONGS] = {got, hitblock, hit, gameover};
+int songLengths[SONGS] = {11, 3, 2, 5};
 
 #endif
