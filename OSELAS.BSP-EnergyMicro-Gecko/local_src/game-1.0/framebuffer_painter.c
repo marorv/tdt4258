@@ -22,7 +22,7 @@ void setup_framebuffer () {
     assert(fb0file != -1);
     framebuffer = mmap(0, 320*240, PROT_READ | PROT_WRITE, MAP_SHARED, fb0file, 0);
     assert(framebuffer != MAP_FAILED);
-
+    
 }
 
 void drawRect(int x, int y, int width, int height, int color) {
