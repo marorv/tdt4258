@@ -1,9 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "framebuffer_painter.h"
 
 int main(int argc, char *argv[])
 {
-	printf("Hello World, I'm game!\n");
+	
+	setup_framebuffer();
+	drawRect(0, 0, 20, 20, 0xffff);
+	drawRect(200, 40, 130, 20, 0xffff);
 
 	exit(EXIT_SUCCESS);
 }
