@@ -32,6 +32,8 @@ typedef struct {
 	float height;
 } Brick;
 
+Pad pad;
+
 Ball triangulate(Ball ball, Frame breakout, Pad pad); 
 Ball move_ball(Ball ball, Frame breakout, Pad pad);
 Pad move_pad(Frame breakout, Pad pad, char input);
@@ -44,5 +46,7 @@ Frame gameover(Frame breakout);
 Ball hit_wall(Frame breakout, Ball ball);
 Frame hit_floor(Frame breakout, Ball ball);
 void startGame(void);
+void onLeftButtonClicked(void);
+void onRightButtonClicked(void);
 
 #endif

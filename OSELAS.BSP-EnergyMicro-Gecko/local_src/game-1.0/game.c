@@ -45,10 +45,10 @@ void gpio_handler(int signo){
     printf("gpio_handler:%i \n", button);
     switch(button){
     	case (0xfe): 
-    	printf("Button sw1 pressed\n");
+    		onLeftButtonClicked();
     	break;
     	case (0xfb): 
-    	printf("Button sw3 pressed\n");
+    		onRightButtonClicked();
     	break;
     	
     	}        

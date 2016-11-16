@@ -173,7 +173,7 @@ Frame gameover(Frame breakout){
 Ball hit_pad(Ball ball, Pad pad){
 
 	float out; 
-	float offset;
+	float offsetPercent;
 	float percentage;
 
 	offsetPercent = ((pad.x + ((float)pad.length / 2)) - ball.x)/pad.length;
@@ -298,10 +298,24 @@ void draw_board(Frame breakout, Pad pad, Ball ball, Brick bricks[], int no_of_br
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 }
 
+void onLeftButtonClicked () {
+	if (pad.x-5 >= 0) {
+		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0x0000);
+		pad.x -= 5;
+		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0xffff);
+	}
+}
+void onRightButtonClicked () {
+	if (pad.x+5 <= SCREEN_WIDTH) {
+		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0x0000);
+		pad.x += 5;
+		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0xffff);
+	}
+}
+
 void startGame() {
 
 	Ball ball;
-	Pad pad;
 	Frame breakout;
 
 	breakout.height = SCREEN_HEIGHT;
@@ -355,7 +369,7 @@ void startGame() {
 	for (;;){
 		usleep(microseconds);
 		ball = move_ball(ball, breakout, pad);
-		pad = read_input(pad, breakout, (pad.x < ball.x) ? 'd':'a');
+		//pad = read_input(pad, breakout, (pad.x < ball.x) ? 'd':'a');
 		ball = hit_something(ball, ball.x, ball.y, bricks, breakout, no_of_bricks, pad);
 		breakout = hit_floor(breakout, ball);
 		//draw_board(breakout, pad, ball, bricks, no_of_bricks);
