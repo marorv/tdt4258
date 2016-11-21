@@ -90,6 +90,7 @@ Pad move_pad(Frame breakout, Pad pad, char input) {
 
 	return pad;
 }
+
 bool ballIsInsideRect(Ball ball, float x, float y, float width, float height) {
 	bool xDirectionIsInside = ((ball.x+10) > x && (ball.x+10) < (x+width)) || ((ball.x-10) < (x+width) && (ball.x-10) > x);
 	bool yDirectionIsInside = ((ball.y-10) > y && (ball.y-10) < (y+height)) || ((ball.y+10) < (y+height) && (ball.y+10) > y);
@@ -238,66 +239,6 @@ Ball hit_something(Ball ball, int x, int y, Brick bricks[], Frame breakout, int 
 	return ball;
 }
 
-void draw_board(Frame breakout, Pad pad, Ball ball, Brick bricks[], int no_of_bricks) {
-	int width = (int)breakout.width;
-	int height = (int)breakout.height;
-
-	/* 
-		   (0, 0)____________ (0, width-1)
-				|[_][_][_][_]|
-				|            | 
-				|     o      |
-				|____[=]_____|
-	(height-1,0)          	  (height-1, width-1)
-	*/
-
-	char board [height][width];
-	//height = rows = y = i
-	//width  = cols = x = j
-
-	//Fill the board with spaces
-	for (int i = 0; i < height; i++){
-		for (int j = 0; j < width; j++){
-			board[i][j] = ' ';
-		}
-	}
-
-	for (int i = 0; i < height; i++){
-		for (int j = 0; j < width; j++){
-
-			//Draw the bricks
-			for (int k = 0; k < no_of_bricks; k++){
-				if (bricks[k].x == j && bricks[k].y == i){
-					board[i][j] = '[';
-					board[i][j+1] = '_';
-					board[i][j+2] = ']';
-				}
-			}
-
-			//Draw the pad
-			if (j == (int)pad.x && i == (int)pad.y){
-				board[i][j] = '[';
-				board[i][j+1] = '=';
-				board[i][j+2] = ']';	
-			}
-
-			//Draw the ball
-			if (j == (int)ball.x && i == (int)ball.y){
-				board[i][j] = 'O';	
-			}
-		}
-	}
-
-	for (int i = 0; i < height; i++){
-		for (int j = 0; j < width; j++){
-			printf("%c ", board[i][j]);
-		}
-		printf("\n");
-	}
-
-	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-}
-
 void onLeftButtonClicked () {
 	if (pad.x-5 >= 0) {
 		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0x0000);
@@ -305,6 +246,7 @@ void onLeftButtonClicked () {
 		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0xffff);
 	}
 }
+
 void onRightButtonClicked () {
 	if (pad.x+5 <= SCREEN_WIDTH) {
 		fillRect((int)pad.x, (int)pad.y, (int)pad.length, (int)pad.height, 0x0000);
