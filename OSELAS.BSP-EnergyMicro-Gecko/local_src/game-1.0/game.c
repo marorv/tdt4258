@@ -9,10 +9,9 @@
 #include <linux/fb.h>
 #include <sys/mman.h>
 
-#define button1 241;
-#define button2 245;
 
-#define BUF_SIZE 1;
+
+
 
 int driver_fp;
 char buffer[1];
@@ -24,7 +23,7 @@ int signalInit(void);
 int main(int argc, char *argv[]);
 
 
-
+/*set up driver-gamepad */
 int gamepadInit(){
     driver_fp = open("/dev/gamepad", O_RDONLY);
     if(driver_fp == -1){
@@ -36,7 +35,7 @@ int gamepadInit(){
 }
 
 
-//Interrupt handler    
+/*Interrupt handler */   
 void gpio_handler(int signo){
     
     int gpio_reg;
@@ -54,6 +53,7 @@ void gpio_handler(int signo){
     	}        
 }
 
+/*setup signal */
 int signalInit(){
     int oflags;
     int errno;
@@ -62,12 +62,12 @@ int signalInit(){
         printf("Error on signal setup\n");
         return -1;
     }    
-    
+    /*register owner*/
     errno = fcntl(driver_fp, F_SETOWN, getpid());
     printf("getpid%i \n", getpid());
     
     oflags = fcntl(driver_fp, F_GETFL);
-
+	/* enable asynchronous notification*/
     errno = fcntl(driver_fp, F_SETFL, oflags | FASYNC);
     
     return 0;

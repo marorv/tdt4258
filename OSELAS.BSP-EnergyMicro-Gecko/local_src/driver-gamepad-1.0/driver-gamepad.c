@@ -20,8 +20,8 @@
 
 
 MODULE_LICENSE ("GPL");  /* programlisence for the module */
-module_init(gamepad_init); /* angir hva som er init-funksjon */
-module_exit(gamepad_cleanup); /* angir hva som er exit-funksjon */
+module_init(gamepad_init); /*  init-funksjon */
+module_exit(gamepad_cleanup); /* exit-funksjon */
 
 
 /* file pointer */
@@ -63,12 +63,11 @@ static int gamepad_fasync(int fd, struct file* filp, int mode) {
 }
 
 
-
+/* handler interrupt*/
 irqreturn_t gpio_interrupt_handler(int irq, void* dev_id, struct pt_regs* regs){
 	printk(KERN_INFO "interrupt\n");
     iowrite32(ioread32(GPIO_IF), GPIO_IFC); 
     if (async_queue) {
-    	printk(KERN_INFO "Driver:%i \n", SIGIO);
         kill_fasync(&async_queue, SIGIO, POLL_IN);
     }
     return IRQ_HANDLED;
@@ -85,7 +84,6 @@ irqreturn_t gpio_interrupt_handler(int irq, void* dev_id, struct pt_regs* regs){
 
 static int __init gamepad_init(void)
 {
-	
 	int result;
 	result = alloc_chrdev_region(&devno, 0, DEV_NR_COUNT, DRIVER_NAME); /* allocation of the driver number */
 	
@@ -107,7 +105,7 @@ static int __init gamepad_init(void)
         printk(KERN_ALERT "Error requesting GPIO_PC_DIN memory region\n");
         return -1;
     }
-    //setup GPIO
+    /*setup GPIO*/
     iowrite32(0x33333333, GPIO_PC_MODEL);/*set button pins to input pins*/
     iowrite32(0xff, GPIO_PC_DOUT); /*enable data output for button pins*/
     iowrite32(0x22222222, GPIO_EXTIPSELL); /*set GPIO_EXTIPSELL to 0x22222222 for the button pins*/
@@ -156,7 +154,7 @@ static void __exit gamepad_cleanup(void)
 	 device_destroy(cl, devno);
      class_destroy(cl);
     
-    /* initialize the cdev structure to the file_oprations structure */
+    /* uninitialize the cdev structure to the file_oprations structure */
 	 cdev_del(&my_cdev);
 	 unregister_chrdev_region(devno, DEV_NR_COUNT);
 	 
